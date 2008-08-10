@@ -1,0 +1,8 @@
+This script is an evolution from the scripts posted at the following places:
+
+http://tekrat.com/2008/02/21/vim-diff/
+http://www.vim.org/scripts/script.php?script_id=2201
+http://playground.audioscrobbler.com/jonty/scmdiff.vim
+
+I have made a number of improvements so far including better buffer management.
+More to come as I use it for real, I suspect.
