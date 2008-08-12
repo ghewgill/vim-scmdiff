@@ -19,7 +19,7 @@ function! s:scmToggle()
     if exists('b:scmDiffOn') && b:scmDiffOn == 1
         let b:scmDiffOn = 0
         set nodiff
-        exe 'bdelete' . b:tmpfile
+        exe 'bdelete ' . b:tmpfile
     else
         call s:scmDiff()
     endif
@@ -39,7 +39,7 @@ function! s:scmDiff(...)
     if exists('b:scmDiffOn') && b:scmDiffOn == 1
         let b:scmDiffOn = 0
         set nodiff
-        exe 'bdelete' . b:tmpfile
+        exe 'bdelete ' . b:tmpfile
     endif
 
     let b:scmDiffOn = 1
