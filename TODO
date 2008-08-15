@@ -1,0 +1,10 @@
+Bugs
+
+* After exiting (:q) a buffer that has diff enabled, subsequent diffs appear to fail.
+* Should restore options like 'wrap' to their original state when turning diff off
+* winsaveview() and winrestview() require Vim 7.x. Autodetect and degrade gracefully.
+
+Features
+
+* Autodetect type of scm (by file/dir existence? or by trying to execute an scm command?
+* Option to show side-by-side diff (ie. don't hide original buffer)
