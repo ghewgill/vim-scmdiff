@@ -62,7 +62,7 @@ function! s:scmDiff(...)
     let cmdOutput = system(cmd)
 
     if v:shell_error && cmdOutput != ''
-        echohl WarningMsg | echon cmdOutput 
+        echohl WarningMsg | echon cmdOutput
         return
     endif
 
@@ -70,7 +70,7 @@ function! s:scmDiff(...)
     let cmdOutput = system(cmd)
 
     if v:shell_error && cmdOutput != ''
-        echohl WarningMsg | echon cmdOutput 
+        echohl WarningMsg | echon cmdOutput
         return
     endif
 
@@ -78,7 +78,7 @@ function! s:scmDiff(...)
         exe 'diffsplit' . b:tmpfile
     else
         exe 'vert diffsplit' . b:tmpfile
-    endif 
+    endif
 
     exe 'set filetype=' . ftype
 
@@ -98,3 +98,7 @@ function! s:scmDiff(...)
 endfunction
 
 autocmd CursorHold * call s:scmRefresh()
+
+
+" vim>600: expandtab sw=4 ts=4 sts=4 fdm=marker
+" vim<600: expandtab sw=4 ts=4 sts=4
