@@ -1,3 +1,9 @@
+" Vim script to show file differences from a base version in SCM.
+" Home: http://github.com/ghewgill/vim-scmdiff
+
+" Default commands:
+"   C-d     Toggle diff view on/off
+"   :D rev  Difference between current and rev
 
 if exists("loadedScmDiff") || &cp
     finish
