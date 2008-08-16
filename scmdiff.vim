@@ -22,7 +22,7 @@ function! s:scmToggle()
     if exists('b:scmDiffOn') && b:scmDiffOn == 1
         let b:scmDiffOn = 0
         set nodiff
-        exe 'bdelete ' . b:tmpfile
+        exe 'bdelete ' . b:scmDiffTmpfile
     else
         call s:scmDiff()
     endif
@@ -79,7 +79,7 @@ function! s:scmDiff(...)
     if exists('b:scmDiffOn') && b:scmDiffOn == 1
         let b:scmDiffOn = 0
         set nodiff
-        exe 'bdelete ' . b:tmpfile
+        exe 'bdelete ' . b:scmDiffTmpfile
     endif
 
     let b:scmDiffOn = 1
@@ -94,8 +94,8 @@ function! s:scmDiff(...)
     endif
 
     let ftype = &filetype
-    let b:tmpfile = tempname()
-    let cmd = 'cat ' . bufname('%') . ' > ' . b:tmpfile
+    let b:scmDiffTmpfile = tempname()
+    let cmd = 'cat ' . bufname('%') . ' > ' . b:scmDiffTmpfile
     let cmdOutput = system(cmd)
     let tmpdiff = tempname()
     let cmd = g:scmDiffCommand . ' diff ' . g:scmDiffRev . ' ' . bufname('%') . ' > ' . tmpdiff
@@ -106,7 +106,7 @@ function! s:scmDiff(...)
         return
     endif
 
-    let cmd = 'patch -R -p0 ' . b:tmpfile . ' ' . tmpdiff
+    let cmd = 'patch -R -p0 ' . b:scmDiffTmpfile . ' ' . tmpdiff
     let cmdOutput = system(cmd)
 
     if v:shell_error && cmdOutput != ''
@@ -115,9 +115,9 @@ function! s:scmDiff(...)
     endif
 
     if a:0 > 0 && a:1 == 'h'
-        exe 'diffsplit' . b:tmpfile
+        exe 'diffsplit' . b:scmDiffTmpfile
     else
-        exe 'vert diffsplit' . b:tmpfile
+        exe 'vert diffsplit' . b:scmDiffTmpfile
     endif
 
     exe 'set filetype=' . ftype
