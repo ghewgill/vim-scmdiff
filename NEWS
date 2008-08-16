@@ -1,3 +1,6 @@
+2008-08-15
+* Add auto-detection of svn, git, and cvs SCMs
+
 2008-08-10
 
 * Make C-d a toggle to turn the diff on/off

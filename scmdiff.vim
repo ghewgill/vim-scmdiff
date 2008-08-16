@@ -1,6 +1,3 @@
-if !exists("g:scmDiffCommand")
-    let g:scmDiffCommand = 'git'
-endif
 
 if exists("loadedScmDiff") || &cp
     finish
@@ -34,7 +31,44 @@ function! s:scmRefresh()
 
 endfunction
 
+function! s:detectSCM()
+
+    " Cache the results we find here to save time
+    if exists("g:scmCWD") && g:scmCWD == getcwd() && exists("g:scmDiffCommand")
+        return
+    endif
+    let g:scmCWD = getcwd()
+
+    " Detect CVS or .svn directories in current path
+    if !exists("g:scmDiffCommand") && isdirectory(g:scmCWD."/.svn")
+        let g:scmDiffCommand = "svn"
+        return
+    endif
+
+    if !exists("g:scmDiffCommand") && isdirectory(g:scmCWD."/CVS")
+        let g:scmDiffCommand = "cvs"
+        return
+    endif
+
+    " Detect .git directories recursively in reverse
+    let my_cwd = g:scmCWD
+    while my_cwd != "/"
+        if !exists("g:scmDiffCommand") && isdirectory(my_cwd."/.git")
+            let g:scmDiffCommand = "git"
+            return
+        endif
+        let my_cwd = simplify(my_cwd."/../")
+    endwhile
+
+endfunction
+
 function! s:scmDiff(...)
+
+    call s:detectSCM()
+    if (!exists("g:scmDiffCommand"))
+        echohl WarningMsg | echon "Could not find .git, .svn, or CVS directories, are you under a supported SCM repository path?"
+        return
+    endif
 
     if exists('b:scmDiffOn') && b:scmDiffOn == 1
         let b:scmDiffOn = 0
