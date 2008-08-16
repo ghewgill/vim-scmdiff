@@ -3,6 +3,7 @@ Bugs
 * After exiting (:q) a buffer that has diff enabled, subsequent diffs appear to fail.
 * Should restore options like 'wrap' to their original state when turning diff off
 * winsaveview() and winrestview() require Vim 7.x. Autodetect and degrade gracefully.
+* Look for SCM directories based on path of file in current buffer, not on getcwd()
 
 Features
 
