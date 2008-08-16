@@ -6,5 +6,6 @@ Bugs
 
 Features
 
-* Autodetect type of scm (by file/dir existence? or by trying to execute an scm command?
 * Option to show side-by-side diff (ie. don't hide original buffer)
+* Make it easier to customize colors and commands
+* Add a refresh or enable an auto-update feature so diff highlighting changes as changes are made.
