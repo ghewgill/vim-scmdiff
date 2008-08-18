@@ -1,3 +1,9 @@
+2008-08-18
+* Initial support for mercurial auto-detection 
+
+2008-08-17
+* fix bug: Look for SCM directories based on path of file in current buffer, not on getcwd() 
+
 2008-08-15
 * Add auto-detection of svn, git, and cvs SCMs
 
