@@ -63,6 +63,10 @@ function! s:detectSCM()
             let g:scmDiffCommand = "git"
             return
         endif
+        if !exists("g:scmDiffCommand") && isdirectory(my_path."/.hg")
+            let g:scmDiffCommand = "hg"
+            return
+        endif
         let my_path = simplify(my_path."/../")
     endwhile
 
