@@ -40,30 +40,30 @@ endfunction
 function! s:detectSCM()
 
     " Cache the results we find here to save time
-    if exists("g:scmCWD") && g:scmCWD == getcwd() && exists("g:scmDiffCommand")
+    if exists("g:scmBufPath") && g:scmBufPath == expand("%:p:h") && exists("g:scmDiffCommand")
         return
     endif
-    let g:scmCWD = getcwd()
+    let g:scmBufPath = expand("%:p:h")
 
     " Detect CVS or .svn directories in current path
-    if !exists("g:scmDiffCommand") && isdirectory(g:scmCWD."/.svn")
+    if !exists("g:scmDiffCommand") && isdirectory(g:scmBufPath."/.svn")
         let g:scmDiffCommand = "svn"
         return
     endif
 
-    if !exists("g:scmDiffCommand") && isdirectory(g:scmCWD."/CVS")
+    if !exists("g:scmDiffCommand") && isdirectory(g:scmBufPath."/CVS")
         let g:scmDiffCommand = "cvs"
         return
     endif
 
     " Detect .git directories recursively in reverse
-    let my_cwd = g:scmCWD
-    while my_cwd != "/"
-        if !exists("g:scmDiffCommand") && isdirectory(my_cwd."/.git")
+    let my_path = g:scmBufPath
+    while my_path != "/"
+        if !exists("g:scmDiffCommand") && isdirectory(my_path."/.git")
             let g:scmDiffCommand = "git"
             return
         endif
-        let my_cwd = simplify(my_cwd."/../")
+        let my_path = simplify(my_path."/../")
     endwhile
 
 endfunction
@@ -98,7 +98,7 @@ function! s:scmDiff(...)
     let cmd = 'cat ' . bufname('%') . ' > ' . b:scmDiffTmpfile
     let cmdOutput = system(cmd)
     let tmpdiff = tempname()
-    let cmd = g:scmDiffCommand . ' diff ' . g:scmDiffRev . ' ' . bufname('%') . ' > ' . tmpdiff
+    let cmd = 'cd ' . g:scmBufPath . ' && ' . g:scmDiffCommand . ' diff ' . g:scmDiffRev . ' ' . expand('%:p') . ' > ' . tmpdiff
     let cmdOutput = system(cmd)
 
     if v:shell_error && cmdOutput != ''
