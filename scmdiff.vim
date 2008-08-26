@@ -4,6 +4,13 @@
 " Default commands:
 "   C-d     Toggle diff view on/off
 "   :D rev  Difference between current and rev
+"
+" You can change the highlighting by adding the following to your 
+" .vimrc file and customizing as necessary.  (or just uncomment them here):
+"   highlight DiffAdd ctermbg=DarkBlue ctermfg=white cterm=NONE
+"   highlight DiffChange ctermbg=DarkBlue ctermfg=white cterm=NONE
+"   highlight DiffText ctermbg=DarkBlue ctermfg=white cterm=underline
+"   highlight DiffDelete ctermbg=red ctermfg=white
 
 if exists("loadedScmDiff") || &cp
     finish
@@ -131,11 +138,6 @@ function! s:scmDiff(...)
     set foldcolumn=0
     set foldlevel=100
     set diffopt= " removed filler so we don't show deleted lines
-
-    highlight DiffAdd ctermbg=DarkBlue ctermfg=white cterm=NONE
-    highlight DiffChange ctermbg=DarkBlue ctermfg=white cterm=NONE
-    highlight DiffText ctermbg=DarkBlue ctermfg=white cterm=underline
-    highlight DiffDelete ctermbg=red ctermfg=white
 
     call winrestview(view)
 

@@ -1,3 +1,6 @@
+2008-08-25
+* Move Highlight colors out of code so they can be customized by user in .vimrc
+
 2008-08-18
 * Initial support for mercurial auto-detection 
 
