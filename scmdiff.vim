@@ -30,8 +30,12 @@ function! s:scmToggle()
         let b:scmDiffOn = 0
         set nodiff
         exe 'bdelete ' . b:scmDiffTmpfile
+        echohl DiffDelete | echon "scmdiff Disabled" | echohl None
     else
         call s:scmDiff()
+        if exists('b:scmDiffOn') && b:scmDiffOn == 1
+            echohl DiffAdd | echon "scmdiff Enabled" | echohl None
+        endif
     endif
 
 endfunction
