@@ -1,5 +1,6 @@
 2008-09-03
 * Add Enabled/Disabled messages when scmdiff is toggled
+* Fix highlighting on error messages so subsequent messages aren't highlighted
 
 2008-08-25
 * Move Highlight colors out of code so they can be customized by user in .vimrc

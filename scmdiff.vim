@@ -87,7 +87,7 @@ function! s:scmDiff(...)
 
     call s:detectSCM()
     if (!exists("g:scmDiffCommand"))
-        echohl WarningMsg | echon "Could not find .git, .svn, or CVS directories, are you under a supported SCM repository path?"
+        echohl WarningMsg | echon "Could not find .git, .svn, or CVS directories, are you under a supported SCM repository path?" | echohl None
         return
     endif
 
@@ -117,7 +117,7 @@ function! s:scmDiff(...)
     let cmdOutput = system(cmd)
 
     if v:shell_error && cmdOutput != ''
-        echohl WarningMsg | echon cmdOutput
+        echohl WarningMsg | echon cmdOutput | echohl None
         return
     endif
 
@@ -125,7 +125,7 @@ function! s:scmDiff(...)
     let cmdOutput = system(cmd)
 
     if v:shell_error && cmdOutput != ''
-        echohl WarningMsg | echon cmdOutput
+        echohl WarningMsg | echon cmdOutput | echohl None
         return
     endif
 
