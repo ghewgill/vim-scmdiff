@@ -56,26 +56,31 @@ function! s:detectSCM()
     endif
     let g:scmBufPath = expand("%:p:h")
 
-    " Detect CVS or .svn directories in current path
+    " Detect CVS, SCCS(bitkeeper) or .svn directories in current path
     if !exists("g:scmDiffCommand") && isdirectory(g:scmBufPath."/.svn")
-        let g:scmDiffCommand = "svn"
+        let g:scmDiffCommand = "svn diff"
         return
     endif
 
     if !exists("g:scmDiffCommand") && isdirectory(g:scmBufPath."/CVS")
-        let g:scmDiffCommand = "cvs"
+        let g:scmDiffCommand = "cvs diff"
         return
     endif
 
-    " Detect .git directories recursively in reverse
+    if !exists("g:scmDiffCommand") && isdirectory(g:scmBufPath."/SCCS")
+        let g:scmDiffCommand = "bk diffs"
+        return
+    endif
+
+    " Detect .git, SCCS(bitkeeper), .hg(mercurial) directories recursively in reverse
     let my_path = g:scmBufPath
     while my_path != "/"
         if !exists("g:scmDiffCommand") && isdirectory(my_path."/.git")
-            let g:scmDiffCommand = "git"
+            let g:scmDiffCommand = "git diff"
             return
         endif
         if !exists("g:scmDiffCommand") && isdirectory(my_path."/.hg")
-            let g:scmDiffCommand = "hg"
+            let g:scmDiffCommand = "hg diff"
             return
         endif
         let my_path = simplify(my_path."/../")
@@ -87,7 +92,7 @@ function! s:scmDiff(...)
 
     call s:detectSCM()
     if (!exists("g:scmDiffCommand"))
-        echohl WarningMsg | echon "Could not find .git, .svn, or CVS directories, are you under a supported SCM repository path?" | echohl None
+        echohl WarningMsg | echon "Could not find .git, .svn, .hg, SCCS, or CVS directories, are you under a supported SCM repository path?" | echohl None
         return
     endif
 
@@ -113,7 +118,7 @@ function! s:scmDiff(...)
     let cmd = 'cat ' . bufname('%') . ' > ' . b:scmDiffTmpfile
     let cmdOutput = system(cmd)
     let tmpdiff = tempname()
-    let cmd = 'cd ' . g:scmBufPath . ' && ' . g:scmDiffCommand . ' diff ' . g:scmDiffRev . ' ' . expand('%:p') . ' > ' . tmpdiff
+    let cmd = 'cd ' . g:scmBufPath . ' && ' . g:scmDiffCommand . ' ' . g:scmDiffRev . ' ' . expand('%:p') . ' > ' . tmpdiff
     let cmdOutput = system(cmd)
 
     if v:shell_error && cmdOutput != ''

@@ -6,6 +6,7 @@ Supported SCMs:
   * SVN
   * GIT
   * Mercurial
+  * Bitkeeper
 
 Installation:
   copy the scmdiff.vim script to your vim plugin path ie: "~/.vim/plugins".   (system paths may vary)
