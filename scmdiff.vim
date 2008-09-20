@@ -147,6 +147,7 @@ function! s:scmDiff(...)
     set foldcolumn=0
     set foldlevel=100
     set diffopt= " removed filler so we don't show deleted lines
+    set noscrollbind
 
     call winrestview(view)
 
