@@ -2,7 +2,7 @@
 " Home: http://github.com/ghewgill/vim-scmdiff
 
 " Default commands:
-"   C-d     Toggle diff view on/off
+"   \d      Toggle diff view on/off
 "   :D rev  Difference between current and rev
 "
 " You can change the highlighting by adding the following to your 

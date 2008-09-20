@@ -12,7 +12,7 @@ Installation:
   copy the scmdiff.vim script to your vim plugin path ie: "~/.vim/plugins".   (system paths may vary)
 
 Default commands:
-  C-d Toggle diff view on/off
+  \d Toggle diff view on/off
   :D rev Difference between current and rev
 
 This script is an evolution from the scripts posted at the following places:

@@ -1,3 +1,6 @@
+2008-09-20
+* Changed the default diff key from C-d to <Leader>d (default would be \d)
+
 2008-09-03
 * Add Enabled/Disabled messages when scmdiff is toggled
 * Fix highlighting on error messages so subsequent messages aren't highlighted
