@@ -18,7 +18,7 @@ endif
 
 let loadedScmDiff = 1
 
-map <silent> <C-d> :call <SID>scmToggle()<CR>
+map <silent> <Leader>d :call <SID>scmToggle()<CR>
 noremap <unique> <script> <plug>Dh :call <SID>scmDiff("h")<CR>
 com! -bar -nargs=? D :call s:scmDiff(<f-args>)
 
