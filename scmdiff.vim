@@ -118,7 +118,7 @@ function! s:scmDiff(...)
     let cmd = 'cat ' . bufname('%') . ' > ' . b:scmDiffTmpfile
     let cmdOutput = system(cmd)
     let tmpdiff = tempname()
-    let cmd = 'cd ' . g:scmBufPath . ' && ' . g:scmDiffCommand . ' ' . g:scmDiffRev . ' ' . expand('%:p') . ' > ' . tmpdiff
+    let cmd = 'cd ' . g:scmBufPath . ' && ' . g:scmDiffCommand . ' ' . g:scmDiffRev . ' ' . expand('%:t') . ' > ' . tmpdiff
     let cmdOutput = system(cmd)
 
     if v:shell_error && cmdOutput != ''
