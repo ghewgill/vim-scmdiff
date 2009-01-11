@@ -72,7 +72,7 @@ function! s:detectSCM()
         return
     endif
 
-    " Detect .git, SCCS(bitkeeper), .hg(mercurial) directories recursively in reverse
+    " Detect .git, SCCS(bitkeeper), .hg(mercurial), _darcs(darcs) directories recursively in reverse
     let my_path = g:scmBufPath
     while my_path != "/"
         if !exists("g:scmDiffCommand") && isdirectory(my_path."/.git")
@@ -81,6 +81,10 @@ function! s:detectSCM()
         endif
         if !exists("g:scmDiffCommand") && isdirectory(my_path."/.hg")
             let g:scmDiffCommand = "hg diff"
+            return
+        endif
+        if !exists("g:scmDiffCommand") && isdirectory(my_path."/_darcs")
+            let g:scmDiffCommand = "darcs diff -u"
             return
         endif
         let my_path = simplify(my_path."/../")
@@ -92,7 +96,7 @@ function! s:scmDiff(...)
 
     call s:detectSCM()
     if (!exists("g:scmDiffCommand"))
-        echohl WarningMsg | echon "Could not find .git, .svn, .hg, SCCS, or CVS directories, are you under a supported SCM repository path?" | echohl None
+        echohl WarningMsg | echon "Could not find .git, .svn, .hg, _darcs, SCCS, or CVS directories, are you under a supported SCM repository path?" | echohl None
         return
     endif
 
@@ -110,6 +114,9 @@ function! s:scmDiff(...)
             let g:scmDiffRev = ''
         else
             let g:scmDiffRev = a:1
+            if (match(g:scmDiffCommand, 'darcs'))
+                g:scmDiffRev = '--from-patch=' . g:scmDiffRev
+            endif
         endif
     endif
 
