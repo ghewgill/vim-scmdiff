@@ -127,6 +127,7 @@ function! s:scmDiff(...)
     let tmpdiff = tempname()
     let cmd = 'cd ' . g:scmBufPath . ' && ' . g:scmDiffCommand . ' ' . g:scmDiffRev . ' ' . expand('%:t') . ' > ' . tmpdiff
     let cmdOutput = system(cmd)
+    let doWrap = &wrap  " Save the current state of wrap for later
 
     if v:shell_error && cmdOutput != ''
         echohl WarningMsg | echon cmdOutput | echohl None
@@ -150,6 +151,9 @@ function! s:scmDiff(...)
     exe 'set filetype=' . ftype
 
     hide
+    if doWrap == 1  
+        set wrap  "Restore the state of wrap
+    endif
 
     set foldcolumn=0
     set foldlevel=100
