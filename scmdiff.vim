@@ -76,7 +76,7 @@ function! s:detectSCM()
     let my_path = g:scmBufPath
     while my_path != "/"
         if !exists("g:scmDiffCommand") && isdirectory(my_path."/.git")
-            let g:scmDiffCommand = "git diff"
+            let g:scmDiffCommand = "git diff --no-ext-diff"
             return
         endif
         if !exists("g:scmDiffCommand") && isdirectory(my_path."/.hg")
