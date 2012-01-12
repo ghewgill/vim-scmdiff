@@ -2,8 +2,11 @@
 " Home: http://github.com/ghewgill/vim-scmdiff
 
 " Default commands:
-"   \d      Toggle diff view on/off
-"   :D rev  Difference between current and rev
+"   \d            Toggle diff view on/off
+"   :D rev        Difference between current and rev
+"   \s            Toggle split view/non-split view
+"   :Dsplit       Set Split view as default
+"   :Dnosplit     Set no Split view as default
 "
 " You can change the highlighting by adding the following to your 
 " .vimrc file and customizing as necessary.  (or just uncomment them here):
@@ -19,22 +22,54 @@ endif
 let loadedScmDiff = 1
 
 map <silent> <Leader>d :call <SID>scmToggle()<CR>
+map <silent> <Leader>s :call <SID>scmSplitToggle()<CR>
 noremap <unique> <script> <plug>Dh :call <SID>scmDiff("h")<CR>
 com! -bar -nargs=? D :call s:scmDiff(<f-args>)
+com! -bar -nargs=? Dsplit :call s:scmSplitToggle(1)
+com! -bar -nargs=? Dnosplit :call s:scmSplitToggle(0)
 
 let g:scmDiffRev = ''
 
 function! s:scmToggle()
 
-    if exists('b:scmDiffOn') && b:scmDiffOn == 1
-        let b:scmDiffOn = 0
+    if exists('t:scmDiffOn') && t:scmDiffOn == 1
+        let t:scmDiffOn = 0
+        if exists('t:scmDiffSplit') && t:scmDiffSplit == 1
+            hide
+        endif
         set nodiff
-        exe 'bdelete ' . b:scmDiffTmpfile
+        exe 'bdelete ' . t:scmDiffTmpfile
         echohl DiffDelete | echon "scmdiff Disabled" | echohl None
     else
         call s:scmDiff()
-        if exists('b:scmDiffOn') && b:scmDiffOn == 1
+        if exists('t:scmDiffOn') && t:scmDiffOn == 1
             echohl DiffAdd | echon "scmdiff Enabled" | echohl None
+        endif
+    endif
+
+endfunction
+
+function! s:scmSplitToggle(...)
+
+    if a:0 == 1
+        let t:scmDiffSplit = a:1
+    else
+        let l:toggle = 0
+        if exists('t:scmDiffOn') && t:scmDiffOn == 1
+            let l:toggle = 1
+            call s:scmToggle()
+        endif
+
+        if exists('t:scmDiffSplit') && t:scmDiffSplit == 1
+            let t:scmDiffSplit = 0
+            echohl DiffDelete | echon "scmDiffSplit Disabled" | echohl None
+        else
+            let t:scmDiffSplit = 1 
+            echohl DiffAdd | echon "scmDiffSplit  Enabled" | echohl None
+        endif
+
+        if l:toggle == 1
+            call s:scmToggle()
         endif
     endif
 
@@ -42,7 +77,7 @@ endfunction
 
 function! s:scmRefresh()
 
-    if exists('b:scmDiffOn') && b:scmDiffOn == 1
+    if exists('t:scmDiffOn') && t:scmDiffOn == 1
         call s:scmDiff()
     endif
 
@@ -100,13 +135,12 @@ function! s:scmDiff(...)
         return
     endif
 
-    if exists('b:scmDiffOn') && b:scmDiffOn == 1
-        let b:scmDiffOn = 0
+    if exists('t:scmDiffOn') && t:scmDiffOn == 1
+        let t:scmDiffOn = 0
         set nodiff
-        exe 'bdelete ' . b:scmDiffTmpfile
+        exe 'bdelete ' . t:scmDiffTmpfile
     endif
 
-    let b:scmDiffOn = 1
     let view = winsaveview()
 
     if a:0 == 1
@@ -121,8 +155,8 @@ function! s:scmDiff(...)
     endif
 
     let ftype = &filetype
-    let b:scmDiffTmpfile = tempname()
-    let cmd = 'cat ' . bufname('%') . ' > ' . b:scmDiffTmpfile
+    let t:scmDiffTmpfile = tempname()
+    let cmd = 'cat ' . bufname('%') . ' > ' . t:scmDiffTmpfile
     let cmdOutput = system(cmd)
     let tmpdiff = tempname()
     let cmd = 'cd ' . g:scmBufPath . ' && ' . g:scmDiffCommand . ' ' . g:scmDiffRev . ' ' . expand('%:t') . ' > ' . tmpdiff
@@ -134,7 +168,7 @@ function! s:scmDiff(...)
         return
     endif
 
-    let cmd = 'patch -R -p0 ' . b:scmDiffTmpfile . ' ' . tmpdiff
+    let cmd = 'patch -R -p0 ' . t:scmDiffTmpfile . ' ' . tmpdiff
     let cmdOutput = system(cmd)
 
     if v:shell_error && cmdOutput != ''
@@ -143,24 +177,27 @@ function! s:scmDiff(...)
     endif
 
     if a:0 > 0 && a:1 == 'h'
-        exe 'diffsplit' . b:scmDiffTmpfile
+        exe 'diffsplit' . t:scmDiffTmpfile
     else
-        exe 'vert diffsplit' . b:scmDiffTmpfile
+        exe 'vert diffsplit' . t:scmDiffTmpfile
     endif
 
     exe 'set filetype=' . ftype
 
-    hide
-    if doWrap == 1  
-        set wrap  "Restore the state of wrap
+    if !exists("t:scmDiffSplit") || t:scmDiffSplit == 0
+        hide
+        if doWrap == 1  
+            set wrap  "Restore the state of wrap
+        endif
+
+        set foldcolumn=0
+        set foldlevel=100
+        set diffopt= " removed filler so we don't show deleted lines
+        set noscrollbind
     endif
 
-    set foldcolumn=0
-    set foldlevel=100
-    set diffopt= " removed filler so we don't show deleted lines
-    set noscrollbind
-
     call winrestview(view)
+    let t:scmDiffOn = 1
 
 endfunction
 
