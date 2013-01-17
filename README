@@ -1,3 +1,11 @@
+The following are the changes that I made
+
+   * Moved the scmdiff.vim to /plugin, so that I can use this Plugin with vundle
+   * Applied the patch from https://gist.github.com/262410
+
+All credit goes to the original developers
+
+Original Readme file follows
 
 vim-scmdiff: A Vim script to show the differences from a base version in SCM.  
 
