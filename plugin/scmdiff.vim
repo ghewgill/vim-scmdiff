@@ -90,6 +90,13 @@ function! s:detectSCM()
         let my_path = simplify(my_path."/../")
     endwhile
 
+    " Detect if file is in clearcase
+    let l:fullBufPath = resolve (expand("%:p"))
+    let l:bufVer = system('cleartool des -s -cview "'.l:fullBufPath.'"')
+    if l:bufVer =~ '@@'
+        let g:scmDiffCommand = "cleartool diff -diff_format -pre"
+    endif
+
 endfunction
 
 function! s:scmDiff(...)
