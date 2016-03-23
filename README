@@ -9,7 +9,7 @@ Supported SCMs:
   * Bitkeeper
 
 Installation:
-  copy the scmdiff.vim script to your vim plugin path ie: "~/.vim/plugins".   (system paths may vary)
+  Copy the scmdiff.vim script to your vim plugin path ie: "~/.vim/plugin".   (system paths may vary)
 
 Default commands:
   \d Toggle diff view on/off
